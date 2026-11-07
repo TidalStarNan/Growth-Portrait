@@ -51,115 +51,97 @@ window.MOCK = {
     { id: 's16', name: '何敏', no: '2023010155', classId: 'c1', avatar: '何' }
   ],
 
-  /* 官方指标标签：参与画像聚合 */
+  /* 四维指标标签：平台只保留这四个 */
   tags: [
-    { id: 'tg1',  name: '主动尝试新教法', dim: 'motivation' },
-    { id: 'tg2',  name: '关注学生差异',   dim: 'motivation' },
-    { id: 'tg3',  name: '主动寻求反馈',   dim: 'motivation' },
-    { id: 'tg4',  name: '教学改进意愿',   dim: 'motivation' },
-    { id: 'tg5',  name: '问题诊断',       dim: 'thinking' },
-    { id: 'tg6',  name: '方案设计',       dim: 'thinking' },
-    { id: 'tg7',  name: '迭代优化',       dim: 'thinking' },
-    { id: 'tg8',  name: '跨学科整合',     dim: 'thinking' },
-    { id: 'tg9',  name: '失败复盘',       dim: 'character' },
-    { id: 'tg10', name: '坚持改进',       dim: 'character' },
-    { id: 'tg11', name: '团队协作',       dim: 'character' },
-    { id: 'tg12', name: '开放分享',       dim: 'character' },
-    { id: 'tg13', name: '课堂创新实施',   dim: 'practice' },
-    { id: 'tg14', name: '教学资源开发',   dim: 'practice' },
-    { id: 'tg15', name: '评价方式创新',   dim: 'practice' },
-    { id: 'tg16', name: '实践活动设计',   dim: 'practice' }
+    { id: 'motivation', name: '创新意识与动机', short: '意识与动机', dim: 'motivation' },
+    { id: 'thinking',   name: '创新思维与方法', short: '思维与方法', dim: 'thinking' },
+    { id: 'character',  name: '创新精神与品格', short: '精神与品格', dim: 'character' },
+    { id: 'practice',   name: '教学与教育实践创新', short: '实践创新', dim: 'practice' }
   ],
 
-  /* 教师备注标签：不参与聚合 */
-  customTags: ['公开课磨课', '板书设计', '情境导入', '单元整体设计', '学情分析', '家校沟通'],
-
+  /* 材料类型 */
   materialTypes: ['教学设计方案', '教学设计方案修改', '实习反思', '教研记录', '教学实践材料'],
 
+  /* 教师备注标签：不参与画像聚合 */
+  customTags: ['公开课磨课', '板书设计', '情境导入', '单元整体设计', '学情分析', '家校沟通'],
+
   materials: [
-    /* ── 李华：四维齐全 ── */
-    { id: 'm1',  sid: 's1', type: '教学设计方案',     title: '《分数的初步认识》教学设计方案', at: '2026-09-18', file: '分数的初步认识-教学设计.pdf', size: '1.2 MB', tags: ['tg1','tg6','tg14'], custom: [], status: 'reviewed',
+    { id: 'm1',  sid: 's1', type: '教学设计方案',     title: '《分数的初步认识》教学设计方案', at: '2026-09-18', file: '分数的初步认识-教学设计.pdf', size: '1.2 MB', tags: ['motivation','thinking','practice'], custom: [], status: 'reviewed',
       summary: '以「分一分」的真实情境导入，尝试让学生先操作再命名分数，改变原先「先讲定义再练习」的顺序。' },
-    { id: 'm2',  sid: 's1', type: '教学设计方案修改', title: '《分数的初步认识》二稿：增加学情前测', at: '2026-09-25', file: '分数的初步认识-二稿.pdf', size: '1.3 MB', tags: ['tg7','tg6'], custom: ['公开课磨课','学情分析'], status: 'reviewed',
+    { id: 'm2',  sid: 's1', type: '教学设计方案修改', title: '《分数的初步认识》二稿：增加学情前测', at: '2026-09-25', file: '分数的初步认识-二稿.pdf', size: '1.3 MB', tags: ['thinking'], custom: ['公开课磨课','学情分析'], status: 'reviewed',
       summary: '组内试讲后发现学生对「平均分」理解不牢，二稿增加 5 分钟前测与错例对比环节。' },
-    { id: 'm3',  sid: 's1', type: '实习反思',         title: '第一次上讲台的三个意外',   at: '2026-10-09', file: '实习反思-第一次上讲台.docx', size: '86 KB', tags: ['tg9','tg10','tg1'], custom: [], status: 'reviewed',
+    { id: 'm3',  sid: 's1', type: '实习反思',         title: '第一次上讲台的三个意外',   at: '2026-10-09', file: '实习反思-第一次上讲台.docx', size: '86 KB', tags: ['character','motivation'], custom: [], status: 'reviewed',
       summary: '原以为学生会被操作材料吸引，实际出现了抢材料、听不懂指令两个问题；记录了三条改进措施。' },
-    { id: 'm4',  sid: 's1', type: '教研记录',         title: '单元整体教学的组内研讨纪要', at: '2026-10-16', file: '教研记录-单元整体教学.docx', size: '64 KB', tags: ['tg11','tg12','tg8'], custom: ['单元整体设计'], status: 'reviewed',
+    { id: 'm4',  sid: 's1', type: '教研记录',         title: '单元整体教学的组内研讨纪要', at: '2026-10-16', file: '教研记录-单元整体教学.docx', size: '64 KB', tags: ['character','thinking'], custom: ['单元整体设计'], status: 'reviewed',
       summary: '与同组三位同学共同梳理「分数的意义」单元脉络，提出了两个跨学科整合点。' },
-    { id: 'm5',  sid: 's1', type: '教学实践材料',     title: '小组合作学习的课堂实录片段', at: '2026-10-23', file: '课堂实录-合作学习.mp4', size: '18.4 MB', tags: ['tg13','tg15','tg2'], custom: ['板书设计'], status: 'reviewed',
+    { id: 'm5',  sid: 's1', type: '教学实践材料',     title: '小组合作学习的课堂实录片段', at: '2026-10-23', file: '课堂实录-合作学习.mp4', size: '18.4 MB', tags: ['practice','motivation'], custom: ['板书设计'], status: 'reviewed',
       summary: '把全班统一提问改成分层任务卡，记录了三组学生的不同完成路径。' },
-    { id: 'm6',  sid: 's1', type: '教学实践材料',     title: '数学绘本阅读活动设计方案', at: '2026-10-30', file: '数学绘本活动方案.pdf', size: '2.1 MB', tags: ['tg14','tg16','tg2'], custom: [], status: 'reviewed',
+    { id: 'm6',  sid: 's1', type: '教学实践材料',     title: '数学绘本阅读活动设计方案', at: '2026-10-30', file: '数学绘本活动方案.pdf', size: '2.1 MB', tags: ['practice','motivation'], custom: [], status: 'reviewed',
       summary: '用《谁偷了包子》绘本串起分数比较，设计了一个可课后延伸的阅读任务单。' },
 
-    /* ── 陈张三：仅两维有证据 ── */
-    { id: 'm7',  sid: 's2', type: '教学设计方案',     title: '《认识时间》教学设计方案', at: '2026-09-20', file: '认识时间-教学设计.pdf', size: '980 KB', tags: ['tg1','tg4'], custom: [], status: 'reviewed',
+    { id: 'm7',  sid: 's2', type: '教学设计方案',     title: '《认识时间》教学设计方案', at: '2026-09-20', file: '认识时间-教学设计.pdf', size: '980 KB', tags: ['motivation'], custom: [], status: 'reviewed',
       summary: '尝试用「一天的时间轴」替代直接讲钟面，先让学生画出自己的作息。' },
-    { id: 'm8',  sid: 's2', type: '教学设计方案修改', title: '《认识时间》二稿', at: '2026-09-28', file: '认识时间-二稿.pdf', size: '1.0 MB', tags: ['tg7','tg6'], custom: [], status: 'reviewed',
+    { id: 'm8',  sid: 's2', type: '教学设计方案修改', title: '《认识时间》二稿', at: '2026-09-28', file: '认识时间-二稿.pdf', size: '1.0 MB', tags: ['thinking'], custom: [], status: 'reviewed',
       summary: '第一稿时间轴耗时过长，二稿把它拆成课前与课中各一段。' },
-    { id: 'm9',  sid: 's2', type: '实习反思',         title: '被学生问住的那节课', at: '2026-10-11', file: '实习反思-被问住的课.docx', size: '72 KB', tags: ['tg3','tg4'], custom: [], status: 'reviewed',
+    { id: 'm9',  sid: 's2', type: '实习反思',         title: '被学生问住的那节课', at: '2026-10-11', file: '实习反思-被问住的课.docx', size: '72 KB', tags: ['motivation'], custom: [], status: 'reviewed',
       summary: '学生问「为什么分针走一圈时针才走一格」，当时没能给出直观解释，课后向指导教师请教。' },
     { id: 'm10', sid: 's2', type: '教学实践材料',     title: '钟面模型制作活动记录', at: '2026-10-25', file: '钟面模型活动记录.pdf', size: '1.6 MB', tags: [], custom: [], status: 'submitted',
       summary: '组织学生用纸盘自制钟面模型，尚未整理成完整材料。' },
 
-    /* ── 王五：有材料、无反馈 ── */
-    { id: 'm11', sid: 's3', type: '教学设计方案',     title: '《圆的认识》教学设计方案', at: '2026-09-22', file: '圆的认识-教学设计.pdf', size: '1.1 MB', tags: ['tg1','tg6'], custom: [], status: 'reviewed',
+    { id: 'm11', sid: 's3', type: '教学设计方案',     title: '《圆的认识》教学设计方案', at: '2026-09-22', file: '圆的认识-教学设计.pdf', size: '1.1 MB', tags: ['motivation','thinking'], custom: [], status: 'reviewed',
       summary: '以「为什么车轮是圆的」为驱动问题，设计了三轮探究活动。' },
-    { id: 'm12', sid: 's3', type: '实习反思',         title: '探究活动的节奏控制', at: '2026-10-14', file: '实习反思-节奏控制.docx', size: '68 KB', tags: ['tg9'], custom: [], status: 'reviewed',
+    { id: 'm12', sid: 's3', type: '实习反思',         title: '探究活动的节奏控制', at: '2026-10-14', file: '实习反思-节奏控制.docx', size: '68 KB', tags: ['character'], custom: [], status: 'reviewed',
       summary: '探究环节超时 12 分钟，反思了任务单颗粒度与巡视路线的问题。' },
     { id: 'm13', sid: 's3', type: '教学实践材料',     title: '圆规使用微课', at: '2026-10-28', file: '圆规使用微课.mp4', size: '24.2 MB', tags: [], custom: [], status: 'submitted',
       summary: '准备了一段 3 分钟的圆规使用示范，尚未提交说明文档。' },
 
-    /* ── 沈赵六 ── */
-    { id: 'm14', sid: 's4', type: '教学设计方案',     title: '《童年的水墨画》教学设计方案', at: '2026-09-19', file: '童年的水墨画-教学设计.pdf', size: '1.0 MB', tags: ['tg6','tg14'], custom: [], status: 'reviewed',
+    { id: 'm14', sid: 's4', type: '教学设计方案',     title: '《童年的水墨画》教学设计方案', at: '2026-09-19', file: '童年的水墨画-教学设计.pdf', size: '1.0 MB', tags: ['thinking','practice'], custom: [], status: 'reviewed',
       summary: '用自己的水墨小样做导入，把诗的意境与画面直接连起来。' },
-    { id: 'm15', sid: 's4', type: '教学实践材料',     title: '诗配画创作活动记录', at: '2026-10-20', file: '诗配画活动记录.pdf', size: '2.8 MB', tags: ['tg13','tg15'], custom: [], status: 'reviewed',
+    { id: 'm15', sid: 's4', type: '教学实践材料',     title: '诗配画创作活动记录', at: '2026-10-20', file: '诗配画活动记录.pdf', size: '2.8 MB', tags: ['practice'], custom: [], status: 'reviewed',
       summary: '让学生为诗句配画，用「画面是否说清了这句诗」替代传统默写检查。' },
-    { id: 'm16', sid: 's4', type: '教研记录',         title: '语文组磨课纪要', at: '2026-10-08', file: '语文组磨课纪要.docx', size: '52 KB', tags: ['tg11'], custom: [], status: 'reviewed',
+    { id: 'm16', sid: 's4', type: '教研记录',         title: '语文组磨课纪要', at: '2026-10-08', file: '语文组磨课纪要.docx', size: '52 KB', tags: ['character'], custom: [], status: 'reviewed',
       summary: '记录组内对导入环节的三条修改意见，已纳入二稿。' },
 
-    /* ── 许陈明 ── */
-    { id: 'm17', sid: 's5', type: '教学设计方案',     title: '《植物的一生》教学设计方案', at: '2026-09-26', file: '植物的一生-教学设计.pdf', size: '1.4 MB', tags: ['tg1','tg5'], custom: [], status: 'reviewed',
+    { id: 'm17', sid: 's5', type: '教学设计方案',     title: '《植物的一生》教学设计方案', at: '2026-09-26', file: '植物的一生-教学设计.pdf', size: '1.4 MB', tags: ['motivation','thinking'], custom: [], status: 'reviewed',
       summary: '发现学生对「种子发芽需要什么」存在大量前概念，据此重排了探究顺序。' },
-    { id: 'm18', sid: 's5', type: '教学设计方案修改', title: '《植物的一生》二稿：增加对照实验', at: '2026-10-10', file: '植物的一生-二稿.pdf', size: '1.5 MB', tags: ['tg7'], custom: [], status: 'reviewed',
+    { id: 'm18', sid: 's5', type: '教学设计方案修改', title: '《植物的一生》二稿：增加对照实验', at: '2026-10-10', file: '植物的一生-二稿.pdf', size: '1.5 MB', tags: ['thinking'], custom: [], status: 'reviewed',
       summary: '把原本的观察活动改成两组对照，让学生自己判断变量。' },
-    { id: 'm19', sid: 's5', type: '实习反思',         title: '实验材料准备的那一周', at: '2026-10-18', file: '实习反思-材料准备.docx', size: '64 KB', tags: ['tg10'], custom: [], status: 'reviewed',
+    { id: 'm19', sid: 's5', type: '实习反思',         title: '实验材料准备的那一周', at: '2026-10-18', file: '实习反思-材料准备.docx', size: '64 KB', tags: ['character'], custom: [], status: 'reviewed',
       summary: '连续三天材料发芽失败，记录了排查过程与最后的解决方案。' },
-    { id: 'm20', sid: 's5', type: '教学实践材料',     title: '种植角观察记录表', at: '2026-10-27', file: '种植角观察记录.pdf', size: '1.2 MB', tags: ['tg13','tg16'], custom: [], status: 'submitted',
+    { id: 'm20', sid: 's5', type: '教学实践材料',     title: '种植角观察记录表', at: '2026-10-27', file: '种植角观察记录.pdf', size: '1.2 MB', tags: ['practice'], custom: [], status: 'submitted',
       summary: '设计了为期两周的观察记录表，学生每日填写。' },
 
-    /* ── 刘洋 ── */
-    { id: 'm21', sid: 's6', type: '教学设计方案',     title: '《认识钟表》教学设计方案', at: '2026-09-24', file: '认识钟表-教学设计.pdf', size: '900 KB', tags: ['tg1'], custom: [], status: 'submitted',
+    { id: 'm21', sid: 's6', type: '教学设计方案',     title: '《认识钟表》教学设计方案', at: '2026-09-24', file: '认识钟表-教学设计.pdf', size: '900 KB', tags: ['motivation'], custom: [], status: 'submitted',
       summary: '引入「没有钟表的一天」情境，但活动设计还不完整。' },
-    { id: 'm22', sid: 's6', type: '教学实践材料',     title: '课堂教具照片与说明', at: '2026-10-22', file: '教具照片.zip', size: '6.4 MB', tags: ['tg13'], custom: [], status: 'submitted',
+    { id: 'm22', sid: 's6', type: '教学实践材料',     title: '课堂教具照片与说明', at: '2026-10-22', file: '教具照片.zip', size: '6.4 MB', tags: ['practice'], custom: [], status: 'submitted',
       summary: '自制了一套可转动的大钟面教具。' },
 
-    /* ── 2 班 ── */
-    { id: 'm23', sid: 's7', type: '教学设计方案',     title: '《乌鸦喝水》教学设计方案', at: '2026-09-21', file: '乌鸦喝水-教学设计.pdf', size: '1.0 MB', tags: ['tg6'], custom: [], status: 'reviewed',
+    { id: 'm23', sid: 's7', type: '教学设计方案',     title: '《乌鸦喝水》教学设计方案', at: '2026-09-21', file: '乌鸦喝水-教学设计.pdf', size: '1.0 MB', tags: ['thinking'], custom: [], status: 'reviewed',
       summary: '用实物演示替代图片讲解，让学生亲手试石头填瓶。' },
-    { id: 'm24', sid: 's7', type: '实习反思',         title: '演示实验失败的十分钟', at: '2026-10-13', file: '实习反思-演示实验.docx', size: '70 KB', tags: ['tg9','tg10'], custom: [], status: 'reviewed',
+    { id: 'm24', sid: 's7', type: '实习反思',         title: '演示实验失败的十分钟', at: '2026-10-13', file: '实习反思-演示实验.docx', size: '70 KB', tags: ['character'], custom: [], status: 'reviewed',
       summary: '瓶子太小导致水面没有明显上升，现场改用透明量杯补救。' },
-    { id: 'm25', sid: 's7', type: '教学实践材料',     title: '课堂演示实验记录', at: '2026-10-26', file: '演示实验记录.pdf', size: '1.8 MB', tags: ['tg13'], custom: [], status: 'submitted',
+    { id: 'm25', sid: 's7', type: '教学实践材料',     title: '课堂演示实验记录', at: '2026-10-26', file: '演示实验记录.pdf', size: '1.8 MB', tags: ['practice'], custom: [], status: 'submitted',
       summary: '整理了两次演示实验的对比数据。' },
 
-    { id: 'm26', sid: 's8', type: '教学设计方案',     title: '《分数的意义》教学设计方案', at: '2026-09-23', file: '分数的意义-教学设计.pdf', size: '1.1 MB', tags: ['tg1','tg5'], custom: [], status: 'submitted',
+    { id: 'm26', sid: 's8', type: '教学设计方案',     title: '《分数的意义》教学设计方案', at: '2026-09-23', file: '分数的意义-教学设计.pdf', size: '1.1 MB', tags: ['motivation','thinking'], custom: [], status: 'submitted',
       summary: '从「一个整体」与「一个单位」的辨析切入。' },
-    { id: 'm27', sid: 's8', type: '教研记录',         title: '小组集体备课记录', at: '2026-10-12', file: '集体备课记录.docx', size: '48 KB', tags: ['tg11','tg12'], custom: [], status: 'submitted',
+    { id: 'm27', sid: 's8', type: '教研记录',         title: '小组集体备课记录', at: '2026-10-12', file: '集体备课记录.docx', size: '48 KB', tags: ['character'], custom: [], status: 'submitted',
       summary: '四人小组分工完成一课时设计，负责课件与素材。' },
 
-    { id: 'm28', sid: 's9', type: '实习反思',         title: '一年级课堂常规的建立', at: '2026-10-15', file: '实习反思-课堂常规.docx', size: '66 KB', tags: ['tg3'], custom: [], status: 'submitted',
+    { id: 'm28', sid: 's9', type: '实习反思',         title: '一年级课堂常规的建立', at: '2026-10-15', file: '实习反思-课堂常规.docx', size: '66 KB', tags: ['motivation'], custom: [], status: 'submitted',
       summary: '记录了三次口令调整的尝试与效果差异。' },
-    { id: 'm29', sid: 's9', type: '教学实践材料',     title: '课堂评价小印章使用记录', at: '2026-10-29', file: '评价印章记录.pdf', size: '1.1 MB', tags: ['tg14','tg16'], custom: [], status: 'submitted',
+    { id: 'm29', sid: 's9', type: '教学实践材料',     title: '课堂评价小印章使用记录', at: '2026-10-29', file: '评价印章记录.pdf', size: '1.1 MB', tags: ['practice'], custom: [], status: 'submitted',
       summary: '用印章替代口头表扬，记录了一周内学生的反馈。' },
 
-    { id: 'm30', sid: 's10', type: '教学设计方案',    title: '《认识图形》教学设计方案', at: '2026-09-30', file: '认识图形-教学设计.pdf', size: '870 KB', tags: ['tg6'], custom: [], status: 'submitted',
+    { id: 'm30', sid: 's10', type: '教学设计方案',    title: '《认识图形》教学设计方案', at: '2026-09-30', file: '认识图形-教学设计.pdf', size: '870 KB', tags: ['thinking'], custom: [], status: 'submitted',
       summary: '以「摸一摸、猜一猜」的触觉游戏导入。' },
 
-    { id: 'm31', sid: 's11', type: '教学设计方案',    title: '《秋天》教学设计方案', at: '2026-09-27', file: '秋天-教学设计.pdf', size: '940 KB', tags: ['tg1','tg4'], custom: [], status: 'reviewed',
+    { id: 'm31', sid: 's11', type: '教学设计方案',    title: '《秋天》教学设计方案', at: '2026-09-27', file: '秋天-教学设计.pdf', size: '940 KB', tags: ['motivation'], custom: [], status: 'reviewed',
       summary: '把课文学习与校园落叶观察结合起来。' },
-    { id: 'm32', sid: 's11', type: '实习反思',        title: '户外活动的组织反思', at: '2026-10-17', file: '实习反思-户外活动.docx', size: '62 KB', tags: ['tg9'], custom: [], status: 'reviewed',
+    { id: 'm32', sid: 's11', type: '实习反思',        title: '户外活动的组织反思', at: '2026-10-17', file: '实习反思-户外活动.docx', size: '62 KB', tags: ['character'], custom: [], status: 'reviewed',
       summary: '户外观察时队伍管理失控，记录了三条改进办法。' },
 
-    { id: 'm33', sid: 's12', type: '教学实践材料',    title: '拼音卡片制作', at: '2026-10-24', file: '拼音卡片.zip', size: '4.2 MB', tags: ['tg13'], custom: [], status: 'submitted',
+    { id: 'm33', sid: 's12', type: '教学实践材料',    title: '拼音卡片制作', at: '2026-10-24', file: '拼音卡片.zip', size: '4.2 MB', tags: ['practice'], custom: [], status: 'submitted',
       summary: '一套手绘拼音卡片，用于课后个别辅导。' }
   ],
 

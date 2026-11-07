@@ -136,7 +136,11 @@
       const dims = DIMS.map(d => Object.assign({}, d, cov[d.key]));
       const byLevel = [...dims].sort((a, b) => b.level - a.level || b.materials - a.materials);
       const strengths = byLevel.filter(d => d.level >= 1).slice(0, 2);
-      const weak = [...dims].sort((a, b) => a.level - b.level || a.materials - b.materials).slice(0, 2);
+      let weak = [...dims]
+        .filter(d => d.level < 2)
+        .sort((a, b) => a.level - b.level || a.materials - b.materials)
+        .slice(0, 2);
+      if (!weak.length) weak = byLevel.slice(-1);
       return { cov, dims, strengths, weak };
     },
 
@@ -186,7 +190,7 @@
   function tagChip(tagId, cls) {
     const t = TAGMAP[tagId];
     if (!t) return '';
-    return `<span class="tag ${cls || ''}"><i class="dim-dot dim-${t.dim}"></i>${esc(t.name)}</span>`;
+    return `<span class="tag ${cls || ''}"><i class="dim-dot dim-${t.dim}"></i>${esc(t.short || t.name)}</span>`;
   }
 
   function customChip(name) {
@@ -395,17 +399,19 @@
     return s;
   }
 
-  /** 环形 */
+  /** 环形 / 饼图 */
   function donutSVG(items, opts) {
     opts = opts || {};
     const W = 200, H = 200, cx = 100, cy = 100, r = 62, sw = 22;
     const C = 2 * Math.PI * r;
     const total = items.reduce((a, b) => a + b.value, 0) || 1;
-    let s = `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" style="max-width:200px;margin:0 auto">`;
+    const maxW = opts.maxW || '200px';
+    let s = `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" style="max-width:${maxW};margin:0 auto">`;
     s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#f1f4f8" stroke-width="${sw}"/>`;
     let offset = 0;
     const colors = ['#3e6ba6', '#6f96c9', '#a9c3e3', '#cfdcea', '#b08850', '#8a6ea8'];
     items.forEach((it, i) => {
+      if (!it.value) return;
       const len = C * it.value / total;
       s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${it.color || colors[i % colors.length]}"
         stroke-width="${sw}" stroke-dasharray="${(len - 2).toFixed(1)} ${(C - len + 2).toFixed(1)}"
@@ -413,8 +419,10 @@
         transform="rotate(-90 ${cx} ${cy})"/>`;
       offset += len;
     });
-    s += `<text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="22" font-weight="600" fill="#1d1d1f" font-family="inherit">${total}</text>`;
-    s += `<text x="${cx}" y="${cy + 18}" text-anchor="middle" font-size="11" fill="#9a9aa0" font-family="inherit">${esc(opts.centerLabel || '总量')}</text>`;
+    if (opts.center !== false) {
+      s += `<text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="22" font-weight="600" fill="#1d1d1f" font-family="inherit">${opts.centerText != null ? opts.centerText : total}</text>`;
+      s += `<text x="${cx}" y="${cy + 18}" text-anchor="middle" font-size="11" fill="#9a9aa0" font-family="inherit">${esc(opts.centerLabel || '总量')}</text>`;
+    }
     s += '</svg>';
     return s;
   }

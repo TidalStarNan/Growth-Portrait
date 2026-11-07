@@ -16,16 +16,7 @@
   /* ═════════════════════ 启动页 ═════════════════════ */
 
   function initSplash() {
-    const hint = $('#skip-hint');
-    let n = 3;
-    const t = setInterval(() => {
-      n -= 1;
-      if (hint) hint.textContent = n > 0 ? `${n} 秒后自动进入` : '';
-      if (n <= 0) { clearInterval(t); location.hash = '#/login'; }
-    }, 1000);
-    document.addEventListener('click', e => {
-      if (e.target.closest('a')) clearInterval(t);
-    });
+    /* 启动页直接提供角色入口，不再自动跳转 */
   }
 
   /* ═════════════════════ 二维码 ═════════════════════ */
@@ -74,8 +65,7 @@
       el.innerHTML = `
         <div class="row-between">
           <div>
-            <div class="t-xs c-3">成长画像预览</div>
-            <div class="t-lg fw-600 mt-8">证据覆盖 · 四个维度</div>
+            <div class="t-xl fw-600">我的成长画像预览</div>
           </div>
           <a class="chip active" href="#/student/portrait">完整画像 ${icon('chev', 14)}</a>
         </div>
@@ -725,84 +715,89 @@
   /* ═════════════════════ 多元研判与反馈输出 ═════════════════════ */
 
   function initReview() {
-    const sid = qs('sid') || 's1';
-    const st = model.student(sid);
-    const mats = model.materialsOf(sid);
     const root = $('#review-body');
     if (!root) return;
 
-    root.innerHTML = `
-      <div class="card">
-        <div class="row gap-12">
-          ${UI.avatar(st)}
-          <div class="grow">
-            <div class="t-md fw-600">${esc(st.name)}</div>
-            <div class="t-sm c-3 mt-8">${esc(model.klass(st.classId).name)} · 已提交 ${mats.length} 份材料</div>
+    let sid = qs('sid') || 's1';
+
+    function render() {
+      const st = model.student(sid);
+      const mats = model.materialsOf(sid);
+
+      root.innerHTML = `
+        <div class="card">
+          <div class="field">
+            <label>选择学生 <span class="hint">这份反馈写给谁</span></label>
+            <select class="input" id="rv-student">
+              ${D.students.map(s => `<option value="${s.id}"${s.id === sid ? ' selected' : ''}>${esc(s.name)} · ${esc(model.klass(s.classId).name)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="t-xs c-3 mt-12">${esc(st.name)} 已提交 ${mats.length} 份材料</div>
+        </div>
+
+        <div class="banner warn">
+          ${icon('shield', 17)}
+          <div><b>本平台不提供打分功能。</b>禁止直接评定单一量化分数，也没有分数录入入口。</div>
+        </div>
+
+        <div class="card">
+          <div class="field">
+            <label>质性评语 <span class="hint">必填</span></label>
+            <textarea class="textarea" id="rv-comment" placeholder="描述你观察到的具体变化，尽量指向材料中的证据"></textarea>
+          </div>
+          <div class="mt-16 field">
+            <label>发展改进建议 <span class="hint">必填</span></label>
+            <textarea class="textarea" id="rv-suggest" placeholder="给出一条具体、可执行的下一步建议"></textarea>
           </div>
         </div>
-      </div>
 
-      <div class="banner warn">
-        ${icon('shield', 17)}
-        <div><b>本平台不提供打分功能。</b>禁止直接评定单一量化分数，也没有分数录入入口。</div>
-      </div>
-
-      <div class="card">
-        <div class="card-hd"><div><h3>纳入本次反馈的材料</h3><p>勾选后，反馈会关联到这些材料</p></div></div>
-        <div class="list">
-          ${mats.map(m => `
-            <label class="list-item" style="cursor:pointer">
-              <input type="checkbox" checked style="width:18px;height:18px;accent-color:#3e6ba6">
-              <div class="li-body">
-                <div class="li-title">${esc(m.title)}</div>
-                <div class="li-sub">${esc(m.type)} · ${UI.fmtDate(m.at)}</div>
-              </div>
-            </label>`).join('')}
+        <div class="card">
+          <div class="card-hd"><div><h3>四维证据等级确认</h3><p>确认的是「证据充分程度」，不是能力评定</p></div></div>
+          <div class="stack">
+            ${DIMS.map(d => `
+              <div class="row-between">
+                <span class="row gap-6 t-sm c-2"><span class="dim-dot dim-${d.key}"></span>${esc(d.short)}</span>
+                <select class="input" id="lv-${d.key}" style="width:132px;padding:7px 10px;font-size:13px">
+                  ${LEVELS.map(l => `<option value="${l.v}">${l.name}</option>`).join('')}
+                </select>
+              </div>`).join('')}
+          </div>
+          <div class="footnote" style="text-align:left;padding:12px 0 0">
+            等级只表示材料证据的多少，不换算成分数。
+          </div>
         </div>
-      </div>
 
-      <div class="card">
-        <div class="field">
-          <label>质性评语 <span class="hint">必填</span></label>
-          <textarea class="textarea" id="rv-comment" placeholder="描述你观察到的具体变化，尽量指向材料中的证据"></textarea>
+        <div class="card">
+          <div class="card-hd"><div><h3>选择材料进行研判</h3><p>可选，勾选后反馈会关联到这些材料</p></div></div>
+          <div class="list">
+            ${mats.map(m => `
+              <label class="list-item" style="padding:9px 2px;cursor:pointer">
+                <input type="checkbox" style="width:16px;height:16px;accent-color:#3e6ba6">
+                <div class="li-body"><div class="t-sm">${esc(m.title)}</div></div>
+              </label>`).join('')}
+          </div>
         </div>
-        <div class="mt-16 field">
-          <label>发展改进建议 <span class="hint">必填</span></label>
-          <textarea class="textarea" id="rv-suggest" placeholder="给出一条具体、可执行的下一步建议"></textarea>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="card-hd"><div><h3>四维证据等级确认</h3><p>确认的是「证据充分程度」，不是能力评定</p></div></div>
-        <div class="stack">
-          ${DIMS.map(d => `
-            <div class="row-between">
-              <span class="row gap-6 t-sm c-2"><span class="dim-dot dim-${d.key}"></span>${esc(d.short)}</span>
-              <select class="input" id="lv-${d.key}" style="width:132px;padding:7px 10px;font-size:13px">
-                ${LEVELS.map(l => `<option value="${l.v}">${l.name}</option>`).join('')}
-              </select>
-            </div>`).join('')}
+        <button class="btn btn-primary btn-block" id="rv-save">提交反馈</button>
+        <div class="footnote">
+          <span class="row gap-6" style="justify-content:center">${icon('lock', 14)} 学生端只能看到评语、建议和等级文字</span>
         </div>
-        <div class="footnote" style="text-align:left;padding:12px 0 0">
-          等级只表示材料证据的多少，不换算成分数。
-        </div>
-      </div>
+      `;
 
-      <button class="btn btn-primary btn-block" id="rv-save">提交反馈</button>
-      <div class="footnote">
-        <span class="row gap-6" style="justify-content:center">${icon('lock', 14)} 学生端只能看到评语、建议和等级文字</span>
-      </div>
-    `;
+      $('#rv-student').addEventListener('change', ev => {
+        sid = ev.target.value;
+        render();
+      });
 
-    const save = $('#rv-save');
-    if (save) {
-      save.addEventListener('click', () => {
+      $('#rv-save').addEventListener('click', () => {
         const c = $('#rv-comment').value.trim();
         const s = $('#rv-suggest').value.trim();
         if (!c || !s) { UI.toast('请完整填写评语与建议'); return; }
         UI.toast('反馈已提交，学生端立即可见');
       });
     }
+
+    render();
   }
 
   /* ═════════════════════ 教师看学生画像 ═════════════════════ */
@@ -890,7 +885,12 @@
 
         <div class="card chart-card mt-16">
           <div class="card-hd"><div><h3>材料类型分布</h3><p>全班提交的材料构成</p></div></div>
-          ${UI.hBarSVG(D.materialTypes.map(t => ({ label: t, value: s.byType[t] || 0 })))}
+          <div class="row" style="justify-content:center">
+            ${UI.donutSVG(D.materialTypes.map(t => ({ label: t, value: s.byType[t] || 0 })), { centerLabel: '份材料' })}
+          </div>
+          ${UI.legend(D.materialTypes.map((t, i) => ({
+            color: ['#3e6ba6', '#6f96c9', '#a9c3e3', '#cfdcea', '#b08850'][i], label: t
+          })))}
         </div>
 
         ${tooSmall ? `
@@ -899,14 +899,18 @@
               '该班共 ' + s.total + ' 人，少于 10 人时分组数据可能反推出个人，出于隐私保护此处不展示四维分布。')}
           </div>` : `
           <div class="card chart-card mt-16">
-            <div class="card-hd"><div><h3>四维证据分布</h3><p>每维度的四档人数</p></div></div>
-            ${UI.stackBarSVG(DIMS.map(d => ({ label: d.short, segments: s.levelDist[d.key] })))}
-            ${UI.legend([
-              { color: UI.LEVEL_COLORS[0], label: '待积累' },
-              { color: UI.LEVEL_COLORS[1], label: '初显' },
-              { color: UI.LEVEL_COLORS[2], label: '稳定' },
-              { color: UI.LEVEL_COLORS[3], label: '成熟' }
-            ])}
+            <div class="card-hd"><div><h3>四维证据分布</h3><p>每个维度的四档人数占比</p></div></div>
+            <div class="donut-grid">
+              ${DIMS.map(d => `
+                <div class="donut-cell">
+                  <div class="donut-name">${esc(d.short)}</div>
+                  ${UI.donutSVG(
+                    LEVELS.map((l, i) => ({ label: l.name, value: s.levelDist[d.key][i], color: UI.LEVEL_COLORS[i] })),
+                    { centerText: s.total, centerLabel: '人', maxW: '124px' }
+                  )}
+                </div>`).join('')}
+            </div>
+            ${UI.legend(LEVELS.map((l, i) => ({ color: UI.LEVEL_COLORS[i], label: l.name })))}
           </div>`}
 
         <div class="card mt-16">
@@ -957,33 +961,52 @@
     const root = $('#tag-lib');
     if (!root) return;
     let extra = [];
+    let cid = 'c1';
 
     function render() {
-      root.innerHTML = DIMS.map(d => {
-        const tags = model.dimTags(d.key);
-        return `<div class="card">
-          <div class="card-hd">
-            <div class="row gap-6">
-              <span class="dim-dot dim-${d.key}" style="width:8px;height:8px"></span>
-              <div><h3>${esc(d.name)}</h3><p>${esc(d.desc)}</p></div>
+      const kl = model.klass(cid);
+      root.innerHTML = `
+        <div class="card card-soft">
+          <div class="t-xs c-3">当前指标库</div>
+          <div class="t-lg fw-600 mt-8">${esc(kl.name)} · 师范生创新能力指标库</div>
+          <div class="t-xs c-3 mt-8">面向师范生培养目标：课堂实践、教学反思、教研协作</div>
+          <div class="seg mt-16" id="tag-cls">
+            ${D.classes.map(c => `<button class="${c.id === cid ? 'active' : ''}" data-cid="${c.id}">${esc(c.name)}</button>`).join('')}
+          </div>
+        </div>
+        ${DIMS.map(d => {
+          const tags = model.dimTags(d.key);
+          return `<div class="card mt-16">
+            <div class="card-hd">
+              <div class="row gap-6">
+                <span class="dim-dot dim-${d.key}" style="width:8px;height:8px"></span>
+                <div><h3>${esc(d.name)}</h3><p>${esc(d.desc)}</p></div>
+              </div>
+              <span class="t-xs c-4">${tags.length} 个标签</span>
             </div>
-            <span class="t-xs c-4">${tags.length} 个标签</span>
-          </div>
-          <div class="tag-row">
-            ${tags.map(t => `
-              <span class="tag" style="padding-right:6px">
-                ${esc(t.name)}
-                <button class="t-xs c-4" style="margin-left:4px;padding:0 2px" title="停用" onclick="UI.toast('已停用，历史材料不受影响')">×</button>
-              </span>`).join('')}
-            ${extra.filter(x => x.dim === d.key).map(x => `
-              <span class="tag" style="background:#fff;border:1px dashed var(--primary)">${esc(x.name)}</span>`).join('')}
-          </div>
-          <div class="row gap-6 mt-12">
-            <input class="input" placeholder="新增标签…" style="padding:8px 12px;font-size:13px"
-              onkeydown="if(event.key==='Enter'&&this.value.trim()){window.__addTag('${d.key}',this.value.trim())}">
-          </div>
-        </div>`;
-      }).join('');
+            <div class="tag-row">
+              ${tags.map(t => `
+                <span class="tag" style="padding-right:6px">
+                  ${esc(t.name)}
+                  <button class="t-xs c-4" style="margin-left:4px;padding:0 2px" title="停用" onclick="UI.toast('已停用，历史材料不受影响')">×</button>
+                </span>`).join('')}
+              ${extra.filter(x => x.dim === d.key).map(x => `
+                <span class="tag" style="background:#fff;border:1px dashed var(--primary)">${esc(x.name)}</span>`).join('')}
+            </div>
+            <div class="row gap-6 mt-12">
+              <input class="input" placeholder="新增标签…" style="padding:8px 12px;font-size:13px"
+                onkeydown="if(event.key==='Enter'&&this.value.trim()){window.__addTag('${d.key}',this.value.trim())}">
+            </div>
+          </div>`;
+        }).join('')}
+      `;
+
+      UI.$$('#tag-cls button').forEach(b => {
+        b.addEventListener('click', () => {
+          cid = b.dataset.cid;
+          render();
+        });
+      });
     }
 
     window.__addTag = function (dim, name) {
@@ -1009,8 +1032,7 @@
     const root = $('#report-body');
     if (!root) return;
 
-    const c1 = model.classStats('c1');
-    const c2 = model.classStats('c2');
+    const cls = D.classes.map(c => ({ meta: c, stats: model.classStats(c.id) }));
     const byType = {};
     D.materialTypes.forEach(t => { byType[t] = D.materials.filter(m => m.type === t).length; });
 
@@ -1021,7 +1043,6 @@
       allDist[d.key] = arr;
     });
 
-    // 院系对比（演示数据）
     const majors = [
       { label: '小学教育', value: 82 },
       { label: '学前教育', value: 71 },
@@ -1038,28 +1059,42 @@
       </div>
 
       <div class="card chart-card mt-16">
-        <div class="card-hd"><div><h3>年级参与率</h3><p>按班级统计，不含个人</p></div></div>
-        ${UI.hBarSVG([
-          { label: '2023 级 1 班', value: c1.rate },
-          { label: '2023 级 2 班', value: c2.rate }
-        ], { labelW: 96 })}
+        <div class="card-hd"><div><h3>班级参与率</h3><p>按班级统计，不含个人</p></div></div>
+        <div class="donut-grid">
+          ${cls.map(item => `
+            <div class="donut-cell">
+              <div class="donut-name">${esc(item.meta.name)}</div>
+              ${UI.donutSVG([
+                { label: '已提交', value: item.stats.submitters, color: '#3e6ba6' },
+                { label: '未提交', value: item.stats.total - item.stats.submitters, color: '#e2e8f1' }
+              ], { centerText: item.stats.rate + '%', centerLabel: '参与率', maxW: '132px' })}
+            </div>`).join('')}
+        </div>
+        ${UI.legend([
+          { color: '#3e6ba6', label: '已提交' },
+          { color: '#e2e8f1', label: '未提交' }
+        ])}
       </div>
 
       <div class="card chart-card mt-16">
-        <div class="card-hd"><div><h3>四维证据分布</h3><p>全院四档人数</p></div></div>
-        ${UI.stackBarSVG(DIMS.map(d => ({ label: d.short, segments: allDist[d.key] })))}
-        ${UI.legend([
-          { color: UI.LEVEL_COLORS[0], label: '待积累' },
-          { color: UI.LEVEL_COLORS[1], label: '初显' },
-          { color: UI.LEVEL_COLORS[2], label: '稳定' },
-          { color: UI.LEVEL_COLORS[3], label: '成熟' }
-        ])}
+        <div class="card-hd"><div><h3>四维证据分布</h3><p>全院四档人数占比</p></div></div>
+        <div class="donut-grid">
+          ${DIMS.map(d => `
+            <div class="donut-cell">
+              <div class="donut-name">${esc(d.short)}</div>
+              ${UI.donutSVG(
+                LEVELS.map((l, i) => ({ label: l.name, value: allDist[d.key][i], color: UI.LEVEL_COLORS[i] })),
+                { centerText: D.students.length, centerLabel: '人', maxW: '124px' }
+              )}
+            </div>`).join('')}
+        </div>
+        ${UI.legend(LEVELS.map((l, i) => ({ color: UI.LEVEL_COLORS[i], label: l.name })))}
       </div>
 
       <div class="card chart-card mt-16">
         <div class="card-hd"><div><h3>材料类型构成</h3><p>全院材料分布</p></div></div>
         <div class="row" style="justify-content:center">
-          ${UI.donutSVG(D.materialTypes.map((t, i) => ({ label: t, value: byType[t] })), { centerLabel: '份材料' })}
+          ${UI.donutSVG(D.materialTypes.map(t => ({ label: t, value: byType[t] })), { centerLabel: '份材料' })}
         </div>
         ${UI.legend(D.materialTypes.map((t, i) => ({
           color: ['#3e6ba6', '#6f96c9', '#a9c3e3', '#cfdcea', '#b08850'][i], label: t
